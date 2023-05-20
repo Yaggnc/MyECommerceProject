@@ -10,11 +10,13 @@ namespace MVC_MyProject.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly MyECommerceContext _myECommerceContext;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public UserController(UserManager<AppUser> userManager,MyECommerceContext myECommerceContext)
+        public UserController(UserManager<AppUser> userManager,MyECommerceContext myECommerceContext,SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _myECommerceContext = myECommerceContext;
+            _signInManager = signInManager;
         }
         public IActionResult Index()
         {
@@ -49,5 +51,44 @@ namespace MVC_MyProject.Controllers
             }
             else { return View(registerVM); }
         }
+
+        public IActionResult Login() 
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginVM loginVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var login = await _userManager.FindByNameAsync(loginVM.UserName);
+
+                if (login!=null)
+                {
+                    var result = await _signInManager.PasswordSignInAsync(login, loginVM.Password, false, false);
+                    if (result.Succeeded) 
+                    {
+                        return RedirectToAction("Index","Home");
+                    }
+                    else
+                    {
+                        return View(loginVM);
+                    }
+                    
+                }
+                else 
+                { 
+                    return View() ;
+                }
+
+            }
+            else
+            {
+                return View(loginVM);
+            }
+        }
+
+
     }
 }

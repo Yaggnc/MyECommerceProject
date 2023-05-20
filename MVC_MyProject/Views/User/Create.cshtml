@@ -11,12 +11,12 @@
         </div>
         <form asp-action="Create" asp-controller="User">
             <div class="mb-2">
-                <label> UserName</label>
+                <label> Kullanıcı Adı</label>
                 <span asp-validation-for="Username"> </span>
                 <input class="form-control" asp-for="Username" />
             </div>
             <div class="mb-2">
-                <label> Email</label>
+                <label> Email Adresi</label>
                 <span asp-validation-for="Email"> </span>
                 <input type="email" class="form-control" asp-for="Email" />
             </div>
@@ -26,7 +26,7 @@
                 <input type="password" class="form-control" asp-for="Password" />
             </div>
             <div class="mb-2">
-                <label> ConfirmPassword</label>
+                <label> Şifre Onayı</label>
                 <span asp-validation-for="ConfirmPassword"> </span>
                 <input type="password" class="form-control" asp-for="ConfirmPassword" />
             </div>

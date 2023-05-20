@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MyECommerce.DAL.Context;
 using MyECommerce.BLL;
 using MyECommerce.Entity.Entity;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,10 +12,18 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<MyECommerceContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnection")));
 
-builder.Services.AddIdentity<AppUser, IdentityRole>()   
-    
-    .AddEntityFrameworkStores<MyECommerceContext>();
+builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<MyECommerceContext>();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = new PathString("/User/Login");
+    options.Cookie = new CookieBuilder()
+    {
+        Name = "Berke"
+    };
+    options.SlidingExpiration = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(31);
+});
 
 builder.Services.AddRepositoryServices();
 
